@@ -11,7 +11,7 @@ const Routes = props => (
     <div>
       <Switch>
         <Route exact path='/:dbPath?' component={App}/>
-        <Route exact path='/experiment/:id' component={Run}/>
+        <Route exact path='/:dbPath/experiment/:id' component={Run}/>
         <Route component={NotFound}/>
       </Switch>
     </div>
