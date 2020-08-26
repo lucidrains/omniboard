@@ -154,6 +154,8 @@ class App extends Component {
 
   render() {
     const {dbInfo, otherDbs, appVersion, runId} = this.state;
+    const runIdInt = parseInt(runId, 10);
+
     if (!dbInfo || !dbInfo.key) {
       return <span>Loading app...</span>;
     }
@@ -191,7 +193,7 @@ class App extends Component {
         </Navbar>
         <div className='content'>
           <ToastContainer autoClose={false}/>
-          <DrillDownView height={500} runId={runId} width={1000} status={0} dbInfo={dbInfo}/>
+          <DrillDownView height={500} runId={runIdInt} width={1000} status='QUEUED' dbInfo={dbInfo}/>
         </div>
       </div>
     );
