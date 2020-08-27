@@ -165,8 +165,8 @@ class App extends Component {
 
     const {search} = window.location;
     const urlParams = new URLSearchParams(search);
-    const runId = urlParams.get('runId');
-    this.setState({runId: parseInt(runId, 10)});
+    const runId = parseInt(urlParams.get('runId'), 10) || 0;
+    this.setState({runId});
 
     this._fetchData();
   }
@@ -211,8 +211,8 @@ class App extends Component {
         </Navbar>
         <div className='content'>
           <ToastContainer autoClose={false}/>
-          {runId && <DrillDownView height={500} runId={runId} width={1000} status='QUEUED' dbInfo={dbInfo}/>}
-          {!runId && <RunsTable dbInfo={dbInfo} localStorageKey={localStorageKey}
+          {runId ? <DrillDownView runId={runId} width={window.innerWidth} height={window.innerHeight} status='QUEUED' dbInfo={dbInfo}/> : null}
+          {runId ? null : <RunsTable dbInfo={dbInfo} localStorageKey={localStorageKey}
             showCustomColumnModal={showCustomColumnModal}
             handleCustomColumnModalClose={this._handleCustomColumnModalClose}
             showSettingsModal={showSettingsModal}
