@@ -9,6 +9,7 @@ import {parseServerError} from '../Helpers/utils';
 import 'react-toastify/dist/ReactToastify.min.css';
 import './style.scss';
 import RunsTable from '../RunsTable/runsTable';
+import {DrillDownView} from '../DrillDownView/drillDownView';
 import {
   SETTING_TIMEZONE,
   AUTO_REFRESH_INTERVAL,
@@ -161,11 +162,17 @@ class App extends Component {
   componentDidMount() {
     const {match: {params}} = this.props;
     setDbInfo(backend, {path: params.dbPath});
+
+    const {search} = window.location;
+    const urlParams = new URLSearchParams(search);
+    const runId = urlParams.get('runId');
+    this.setState({runId: parseInt(runId, 10)});
+
     this._fetchData();
   }
 
   render() {
-    const {showCustomColumnModal, showSettingsModal, dbInfo, otherDbs, appVersion} = this.state;
+    const {showCustomColumnModal, showSettingsModal, dbInfo, otherDbs, appVersion, runId} = this.state;
     if (!dbInfo || !dbInfo.key) {
       return <span>Loading app...</span>;
     }
@@ -204,12 +211,13 @@ class App extends Component {
         </Navbar>
         <div className='content'>
           <ToastContainer autoClose={false}/>
-          <RunsTable dbInfo={dbInfo} localStorageKey={localStorageKey}
+          {runId && <DrillDownView height={500} runId={runId} width={1000} status='QUEUED' dbInfo={dbInfo}/>}
+          {!runId && <RunsTable dbInfo={dbInfo} localStorageKey={localStorageKey}
             showCustomColumnModal={showCustomColumnModal}
             handleCustomColumnModalClose={this._handleCustomColumnModalClose}
             showSettingsModal={showSettingsModal}
             handleSettingsModalClose={this._handleSettingsModalClose}
-            location={this.props.location} history={this.props.history}/>
+            location={this.props.location} history={this.props.history}/>}
         </div>
       </div>
     );
